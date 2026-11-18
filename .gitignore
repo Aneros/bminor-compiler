@@ -1,0 +1,9 @@
+/build/
+/bminor
+/out/
+*.o
+*.d
+*.dSYM/
+__pycache__/
+.DS_Store
+

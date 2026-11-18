@@ -1,0 +1,45 @@
+(* Textbook B-Minor syntax. Terminals in quotes; lexer token names in capitals.
+   { x } repeats zero or more times; [ x ] is optional; | selects alternatives.
+   Whitespace, comments and diagnosed INVALID tokens are removed before parsing.
+   An else always binds to the nearest unmatched if, including through for bodies.
+   Type validity, constant initializers, lvalues and symbol binding are phase two. *)
+
+program           = { declaration }, EOF ;
+declaration       = IDENTIFIER, ":", ( function-type, function-tail
+                                     | value-type, variable-tail ) ;
+local-declaration = IDENTIFIER, ":", ( function-type, ";"
+                                     | value-type, variable-tail ) ;
+function-tail     = ";" | "=", block ;
+variable-tail     = ";" | "=", initializer, ";" ;
+type              = value-type | function-type ;
+value-type        = basic-type | array-type ;
+basic-type        = "integer" | "boolean" | "char" | "string" | "void" ;
+array-type        = "array", "[", [ expression ], "]", type ;
+function-type     = "function", type, "(", [ parameters ], ")" ;
+parameters        = parameter, { ",", parameter } ;
+parameter         = IDENTIFIER, ":", type ;
+initializer       = expression | "{", [ initializer, { ",", initializer } ], "}" ;
+
+block             = "{", { statement }, "}" ;
+statement         = local-declaration | block | if-statement | for-statement
+                  | print-statement | return-statement | expression, ";" | ";" ;
+if-statement      = "if", "(", expression, ")", statement, [ "else", statement ] ;
+for-statement     = "for", "(", [ expression ], ";", [ expression ], ";",
+                    [ expression ], ")", statement ;
+print-statement   = "print", expression, { ",", expression }, ";" ;
+return-statement  = "return", [ expression ], ";" ;
+
+expression        = logical-or, [ "=", expression ] ;
+logical-or        = logical-and, { "||", logical-and } ;
+logical-and       = comparison, { "&&", comparison } ;
+comparison        = additive, { ( "<" | "<=" | ">" | ">=" | "==" | "!=" ), additive } ;
+additive          = multiplicative, { ( "+" | "-" ), multiplicative } ;
+multiplicative    = power, { ( "*" | "/" | "%" ), power } ;
+power             = unary, [ "^", power ] ;
+unary             = ( "-" | "!" ), unary | postfix ;
+postfix           = primary, { "(", [ arguments ], ")"
+                            | "[", expression, "]" | "++" | "--" } ;
+arguments         = expression, { ",", expression } ;
+primary           = IDENTIFIER | INTEGER_LITERAL | BOOLEAN_LITERAL
+                  | CHAR_LITERAL | STRING_LITERAL | "(", expression, ")" ;
+

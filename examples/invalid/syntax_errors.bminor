@@ -1,0 +1,11 @@
+broken: integer = ;
+good_global: integer = 7;
+
+main: function integer () = {
+    missing_semicolon: integer = 1
+    print "Parser recovers at this print keyword.\n";
+    wrong_expression: integer = (2 + );
+    print "Parser also recovers after the bad expression.\n";
+    return 0;
+}
+

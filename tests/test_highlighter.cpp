@@ -3,6 +3,8 @@
 #include "bminor/lexer.hpp"
 #include "bminor/parser.hpp"
 
+#include <random>
+
 using bminor::HighlightCategory;
 
 namespace {
@@ -97,4 +99,30 @@ TEST(html_wraps_code_to_preserve_a_leading_newline_and_crlf) {
     std::ostringstream output;
     bminor::writeHtml(output, h.source, h.lex.tokens, h.styles, h.diagnostics);
     CHECK(output.str().find("<code>&#13;\n\n") != std::string::npos);
+}
+
+TEST(mutating_valid_programs_1000_times_preserves_source_through_recovery_and_rendering) {
+    const std::string original = "f:function integer(a:array[]integer,n:integer)={i:integer=0;"
+        "for(i=0;i<n;i++){if(a[i]>1) print f(a,n-1); else print \"x\\n\";} return n;}";
+    const std::string insertions = "{}[]();:,=+!@\\\"'\n ";
+    std::mt19937 random(0xA57u);
+    for (std::size_t trial = 0; trial < 1000; ++trial) {
+        std::string mutated = original;
+        for (std::size_t edit = 0; edit < 1 + random() % 8; ++edit) {
+            const auto offset = static_cast<std::size_t>(random() % (mutated.size() + 1));
+            if (random() % 2 && offset < mutated.size()) mutated.erase(offset, 1);
+            else mutated.insert(offset, 1, insertions[random() % insertions.size()]);
+        }
+        Highlighted h(mutated);
+        CHECK(h.styles.size() == h.lex.tokens.size());
+        std::ostringstream output;
+        bminor::writeAnsi(output, h.lex.tokens, h.styles);
+        std::string stripped;
+        const auto colored = output.str();
+        for (std::size_t i = 0; i < colored.size(); ++i) {
+            if (colored[i] == '\x1b') while (i < colored.size() && colored[i] != 'm') ++i;
+            else stripped += colored[i];
+        }
+        CHECK(stripped == mutated);
+    }
 }

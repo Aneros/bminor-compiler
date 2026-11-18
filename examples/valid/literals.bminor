@@ -1,0 +1,11 @@
+// Textbook B-Minor escapes: \n is LF, \0 is NUL, \X denotes X otherwise.
+empty: string = "";
+quoted: string = "a \"quote\", a backslash \\, and a newline\n";
+null_character: char = '\0';
+quote_character: char = '\'';
+boolean_value: boolean = false;
+main: function integer () = {
+    print empty, quoted, null_character, quote_character, boolean_value;
+    return 0;
+}
+

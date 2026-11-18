@@ -1,0 +1,6 @@
+main: function integer () = {
+    // Textbook B-Minor reserves this word but uses for-loops instead.
+    while (true) print 1;
+    return 0;
+}
+

@@ -1,0 +1,14 @@
+square: function integer (value: integer) = { return value ^ 2; }
+
+main: function integer () = {
+    a: integer = 0;
+    b: integer = 0;
+    c: integer = -2 ^ 2 + 3 * 4 / 2 % 5;
+    okay: boolean = !(c < 0) && true || false;
+    a = b = (square)(3);
+    a++;
+    b--;
+    print a, b, c, okay, '\n';
+    return 0;
+}
+

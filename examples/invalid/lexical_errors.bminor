@@ -1,0 +1,10 @@
+main: function integer () = {
+    bad_character: char = 'two';
+    @
+    bad_string: string = "unterminated
+    good: integer = 42;
+    print good;
+    return 0;
+}
+/* This block comment intentionally never closes.
+

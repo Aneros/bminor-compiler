@@ -1,0 +1,38 @@
+/* Phase 1 showcase: declarations, recursion, arrays and contextual colors.
+   توضیحات فارسی نیز بدون تغییر در خروجی حفظ می‌شوند.
+*/
+
+banner: string = "B-Minor says \"hello\"!\n";
+numbers: array [5] integer = {3, 1, 4, 1, 5};
+
+// A function prototype has no body.
+puts: function integer (message: string);
+
+factorial: function integer (n: integer) = {
+    if (n <= 1) return 1;
+    else return n * factorial(n - 1);
+}
+
+sum: function integer (values: array [] integer, count: integer) = {
+    total: integer = 0;
+    i: integer;
+    for (i = 0; i < count; i++) {
+        total = total + values[i];
+    }
+    return total;
+}
+
+main: function integer () = {
+    ready: boolean = true;
+    separator: char = ':';
+    power: integer = 2 ^ 3 ^ 2;
+    print banner;
+    if (ready && sum(numbers, 5) > 0) {
+        print "sum", separator, " ", sum(numbers, 5), "\n";
+    } else {
+        print "No numbers\n";
+    }
+    print "factorial(5) = ", factorial(5), ", power = ", power, "\n";
+    return 0;
+}
+

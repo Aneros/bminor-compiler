@@ -1,0 +1,5 @@
+main: function integer () = {
+    inner: function integer () = { return 1; }
+    return 0;
+}
+

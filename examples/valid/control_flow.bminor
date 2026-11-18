@@ -1,0 +1,16 @@
+main: function integer () = {
+    i: integer = 3;
+    for (; i > 0; i--) {
+        if (i == 3) {
+            print "three\n";
+        } else if (i == 2) {
+            print "two\n";
+        } else print "one\n";
+    }
+    // Omitted initializer, condition and update; empty statements are legal.
+    for (;;) {
+        ;
+        return 0;
+    }
+}
+

@@ -1,0 +1,14 @@
+matrix: array [2] array [3] integer = {{1, 2, 3}, {4, 5, 6}};
+
+row_sum: function integer (row: array [] integer, count: integer) = {
+    total: integer = 0;
+    i: integer;
+    for (i = 0; i < count; i++) total = total + row[i];
+    return total;
+}
+
+main: function integer () = {
+    print row_sum(matrix[1], 3), "\n";
+    return 0;
+}
+

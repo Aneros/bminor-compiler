@@ -5,11 +5,11 @@
 #include "bminor/parser.hpp"
 
 #include <algorithm>
+#include <array>
 #include <exception>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -102,20 +102,26 @@ Options parseOptions(int argc, char** argv) {
     return options;
 }
 
-std::string readInput(const Options& options) {
-    std::ostringstream buffer;
-    if (options.input == "-") {
-        buffer << std::cin.rdbuf();
-        if (std::cin.bad()) throw std::runtime_error("failed to read standard input");
-    } else {
-        std::error_code error;
-        if (std::filesystem::is_directory(options.input, error)) throw std::runtime_error("input is a directory: " + options.input);
-        std::ifstream file(options.input, std::ios::binary);
-        if (!file) throw std::runtime_error("cannot open input: " + options.input);
-        buffer << file.rdbuf();
-        if (file.bad()) throw std::runtime_error("failed to read input: " + options.input);
+std::string readStream(std::istream& input, const std::string& description) {
+    std::array<char, 8192> buffer{};
+    std::string text;
+    while (input) {
+        input.read(buffer.data(), static_cast<std::streamsize>(buffer.size()));
+        text.append(buffer.data(), static_cast<std::size_t>(input.gcount()));
     }
-    return buffer.str();
+    if (input.bad() || !input.eof()) throw std::runtime_error("failed to read " + description);
+    return text;
+}
+
+std::string readInput(const Options& options) {
+    if (options.input == "-") {
+        return readStream(std::cin, "standard input");
+    }
+    std::error_code error;
+    if (std::filesystem::is_directory(options.input, error)) throw std::runtime_error("input is a directory: " + options.input);
+    std::ifstream file(options.input, std::ios::binary);
+    if (!file) throw std::runtime_error("cannot open input: " + options.input);
+    return readStream(file, "input: " + options.input);
 }
 
 void protectInput(const Options& options) {

@@ -18,7 +18,7 @@ if(BUILD_TESTING)
     add_executable(unit_tests ${TEST_SOURCES})
     target_link_libraries(unit_tests PRIVATE bminor_core)
     add_test(NAME unit COMMAND unit_tests)
-    find_package(Python3 COMPONENTS Interpreter QUIET)
+    find_package(Python3 3.10 COMPONENTS Interpreter QUIET)
     if(Python3_FOUND)
         add_test(NAME integration COMMAND ${Python3_EXECUTABLE}
                  ${CMAKE_CURRENT_SOURCE_DIR}/tests/integration.py $<TARGET_FILE:bminor>)

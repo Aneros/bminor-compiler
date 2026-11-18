@@ -3,6 +3,7 @@
 
 import html.parser
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -274,6 +275,17 @@ class Integration(unittest.TestCase):
                 with self.subTest(args=args):
                     result = self.call(*args, data="")
                     self.assertEqual(result.returncode, 2)
+
+    def test_stdin_read_failure_is_not_accepted_as_an_empty_program(self):
+        with tempfile.TemporaryDirectory() as folder:
+            descriptor = os.open(folder, os.O_RDONLY)
+            try:
+                result = subprocess.run([str(BINARY), "--check", "-"], stdin=descriptor,
+                                        capture_output=True, timeout=10)
+            finally:
+                os.close(descriptor)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn(b"failed to read standard input", result.stderr)
 
     def test_deep_input_returns_diagnostic_instead_of_stack_overflow(self):
         source = "x:integer=" + "(" * 5000 + "1" + ")" * 5000 + "; good:integer=2;"

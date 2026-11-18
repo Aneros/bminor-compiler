@@ -6,10 +6,12 @@
 
 #include <algorithm>
 #include <array>
+#include <cstdio>
 #include <exception>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -102,26 +104,29 @@ Options parseOptions(int argc, char** argv) {
     return options;
 }
 
-std::string readStream(std::istream& input, const std::string& description) {
+std::string readStream(std::FILE* input, const std::string& description) {
     std::array<char, 8192> buffer{};
     std::string text;
-    while (input) {
-        input.read(buffer.data(), static_cast<std::streamsize>(buffer.size()));
-        text.append(buffer.data(), static_cast<std::size_t>(input.gcount()));
+    std::size_t count = 0;
+    while ((count = std::fread(buffer.data(), 1, buffer.size(), input)) != 0) {
+        text.append(buffer.data(), count);
     }
-    if (input.bad() || !input.eof()) throw std::runtime_error("failed to read " + description);
+    // ferror distinguishes a read failure from EOF even on implementations
+    // whose synchronized iostream buffer reports both as eofbit.
+    if (std::ferror(input)) throw std::runtime_error("failed to read " + description);
     return text;
 }
 
 std::string readInput(const Options& options) {
     if (options.input == "-") {
-        return readStream(std::cin, "standard input");
+        return readStream(stdin, "standard input");
     }
     std::error_code error;
     if (std::filesystem::is_directory(options.input, error)) throw std::runtime_error("input is a directory: " + options.input);
-    std::ifstream file(options.input, std::ios::binary);
+    const std::unique_ptr<std::FILE, decltype(&std::fclose)> file(
+        std::fopen(options.input.c_str(), "rb"), &std::fclose);
     if (!file) throw std::runtime_error("cannot open input: " + options.input);
-    return readStream(file, "input: " + options.input);
+    return readStream(file.get(), "input: " + options.input);
 }
 
 void protectInput(const Options& options) {

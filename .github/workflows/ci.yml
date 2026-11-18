@@ -1,0 +1,44 @@
+name: C++ front-end checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            cxx: g++
+          - os: ubuntu-latest
+            cxx: clang++
+          - os: macos-latest
+            cxx: clang++
+    runs-on: ${{ matrix.os }}
+    env:
+      CXX: ${{ matrix.cxx }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test with Make
+        run: make -j2 check
+      - name: Build and test with CMake
+        run: |
+          cmake -S . -B build/cmake -DCMAKE_CXX_COMPILER="$CXX" -DCMAKE_BUILD_TYPE=Release
+          cmake --build build/cmake --parallel 2
+          ctest --test-dir build/cmake --output-on-failure
+
+  sanitizers:
+    runs-on: ubuntu-latest
+    env:
+      CXX: clang++
+      ASAN_OPTIONS: detect_leaks=1
+      UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run address and undefined-behavior sanitizers
+        run: make -j2 sanitize

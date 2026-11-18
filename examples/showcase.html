@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>B-Minor | examples/valid/showcase.bminor</title>
+<style>
+:root{color-scheme:dark;--bg:#10151f;--panel:#171e2b;--border:#303c50;--fg:#e6edf3;--muted:#9ba8bd}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:40px 24px}header{margin-bottom:24px}
+.eyebrow{color:#50d4cf;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+h1{font-size:clamp(22px,4vw,34px);margin:8px 0;overflow-wrap:anywhere;line-height:1.25}
+.summary{margin:10px 0 18px;color:var(--muted)}.status{display:inline-block;border:1px solid var(--border);border-radius:20px;padding:3px 12px;font-size:13px}
+.ok{color:#a8d8a0}.bad{color:#ff7b87}.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font:13px/1.7 ui-monospace,monospace}
+pre.code{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:24px;overflow:auto;margin:0;tab-size:4;direction:ltr;text-align:left;unicode-bidi:isolate}
+pre.code code{font:14px/1.8 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;white-space:pre}
+.kw{color:#7db5ff;font-weight:700}.ty{color:#50d4cf}.var{color:#e6edf3}.fn{color:#ffd166}
+.num{color:#ffab70}.str{color:#a8d8a0}.op{color:#b8c1cf}.comment{color:#9099a5;font-style:italic}
+.invalid,.error{color:#ff7b87;text-decoration:underline wavy #ff7b87;text-underline-offset:4px}
+.diagnostics{margin-top:24px;border:1px solid #6b3545;background:#281b25;border-radius:12px;padding:16px 24px}
+.diagnostics h2{font-size:18px;margin:0 0 10px}.diagnostics ol{margin:0;padding-left:24px}.diagnostics li{padding:4px;overflow-wrap:anywhere}
+.diagnostics code{color:#ffab9c}footer{color:var(--muted);font-size:12px;margin-top:18px}
+@media print{body{background:#fff;color:#111}pre.code{background:#fff;color:#111;border-color:#aaa}.var{color:#111}.comment{color:#555}}
+</style>
+</head>
+<body><main><header>
+<div class="eyebrow">B-Minor / Compiler front end</div>
+<h1>examples/valid/showcase.bminor</h1>
+<p class="summary"><span class="status ok">No lexical or syntax errors</span></p>
+<div class="legend" aria-label="Syntax color legend"><span class="kw">keyword</span><span class="ty">type</span><span class="var">variable</span><span class="fn">function</span><span class="num">number / boolean</span><span class="str">string / char</span><span class="comment">comment</span><span class="error">error</span></div>
+</header>
+<pre class="code" id="source" tabindex="0" aria-label="B-Minor source code"><code><span class="comment" data-line="1" data-column="1">/* Phase 1 showcase: declarations, recursion, arrays and contextual colors.
+   توضیحات فارسی نیز بدون تغییر در خروجی حفظ می‌شوند.
+*/</span>
+
+<span class="var" data-line="5" data-column="1">banner</span>: <span class="ty" data-line="5" data-column="9">string</span> <span class="op" data-line="5" data-column="16">=</span> <span class="str" data-line="5" data-column="18">&quot;B-Minor says \&quot;hello\&quot;!\n&quot;</span>;
+<span class="var" data-line="6" data-column="1">numbers</span>: <span class="kw" data-line="6" data-column="10">array</span> [<span class="num" data-line="6" data-column="17">5</span>] <span class="ty" data-line="6" data-column="20">integer</span> <span class="op" data-line="6" data-column="28">=</span> {<span class="num" data-line="6" data-column="31">3</span>, <span class="num" data-line="6" data-column="34">1</span>, <span class="num" data-line="6" data-column="37">4</span>, <span class="num" data-line="6" data-column="40">1</span>, <span class="num" data-line="6" data-column="43">5</span>};
+
+<span class="comment" data-line="8" data-column="1">// A function prototype has no body.</span>
+<span class="fn" data-line="9" data-column="1">puts</span>: <span class="kw" data-line="9" data-column="7">function</span> <span class="ty" data-line="9" data-column="16">integer</span> (<span class="var" data-line="9" data-column="25">message</span>: <span class="ty" data-line="9" data-column="34">string</span>);
+
+<span class="fn" data-line="11" data-column="1">factorial</span>: <span class="kw" data-line="11" data-column="12">function</span> <span class="ty" data-line="11" data-column="21">integer</span> (<span class="var" data-line="11" data-column="30">n</span>: <span class="ty" data-line="11" data-column="33">integer</span>) <span class="op" data-line="11" data-column="42">=</span> {
+    <span class="kw" data-line="12" data-column="5">if</span> (<span class="var" data-line="12" data-column="9">n</span> <span class="op" data-line="12" data-column="11">&lt;=</span> <span class="num" data-line="12" data-column="14">1</span>) <span class="kw" data-line="12" data-column="17">return</span> <span class="num" data-line="12" data-column="24">1</span>;
+    <span class="kw" data-line="13" data-column="5">else</span> <span class="kw" data-line="13" data-column="10">return</span> <span class="var" data-line="13" data-column="17">n</span> <span class="op" data-line="13" data-column="19">*</span> <span class="fn" data-line="13" data-column="21">factorial</span>(<span class="var" data-line="13" data-column="31">n</span> <span class="op" data-line="13" data-column="33">-</span> <span class="num" data-line="13" data-column="35">1</span>);
+}
+
+<span class="fn" data-line="16" data-column="1">sum</span>: <span class="kw" data-line="16" data-column="6">function</span> <span class="ty" data-line="16" data-column="15">integer</span> (<span class="var" data-line="16" data-column="24">values</span>: <span class="kw" data-line="16" data-column="32">array</span> [] <span class="ty" data-line="16" data-column="41">integer</span>, <span class="var" data-line="16" data-column="50">count</span>: <span class="ty" data-line="16" data-column="57">integer</span>) <span class="op" data-line="16" data-column="66">=</span> {
+    <span class="var" data-line="17" data-column="5">total</span>: <span class="ty" data-line="17" data-column="12">integer</span> <span class="op" data-line="17" data-column="20">=</span> <span class="num" data-line="17" data-column="22">0</span>;
+    <span class="var" data-line="18" data-column="5">i</span>: <span class="ty" data-line="18" data-column="8">integer</span>;
+    <span class="kw" data-line="19" data-column="5">for</span> (<span class="var" data-line="19" data-column="10">i</span> <span class="op" data-line="19" data-column="12">=</span> <span class="num" data-line="19" data-column="14">0</span>; <span class="var" data-line="19" data-column="17">i</span> <span class="op" data-line="19" data-column="19">&lt;</span> <span class="var" data-line="19" data-column="21">count</span>; <span class="var" data-line="19" data-column="28">i</span><span class="op" data-line="19" data-column="29">++</span>) {
+        <span class="var" data-line="20" data-column="9">total</span> <span class="op" data-line="20" data-column="15">=</span> <span class="var" data-line="20" data-column="17">total</span> <span class="op" data-line="20" data-column="23">+</span> <span class="var" data-line="20" data-column="25">values</span>[<span class="var" data-line="20" data-column="32">i</span>];
+    }
+    <span class="kw" data-line="22" data-column="5">return</span> <span class="var" data-line="22" data-column="12">total</span>;
+}
+
+<span class="fn" data-line="25" data-column="1">main</span>: <span class="kw" data-line="25" data-column="7">function</span> <span class="ty" data-line="25" data-column="16">integer</span> () <span class="op" data-line="25" data-column="27">=</span> {
+    <span class="var" data-line="26" data-column="5">ready</span>: <span class="ty" data-line="26" data-column="12">boolean</span> <span class="op" data-line="26" data-column="20">=</span> <span class="num" data-line="26" data-column="22">true</span>;
+    <span class="var" data-line="27" data-column="5">separator</span>: <span class="ty" data-line="27" data-column="16">char</span> <span class="op" data-line="27" data-column="21">=</span> <span class="str" data-line="27" data-column="23">&#39;:&#39;</span>;
+    <span class="var" data-line="28" data-column="5">power</span>: <span class="ty" data-line="28" data-column="12">integer</span> <span class="op" data-line="28" data-column="20">=</span> <span class="num" data-line="28" data-column="22">2</span> <span class="op" data-line="28" data-column="24">^</span> <span class="num" data-line="28" data-column="26">3</span> <span class="op" data-line="28" data-column="28">^</span> <span class="num" data-line="28" data-column="30">2</span>;
+    <span class="kw" data-line="29" data-column="5">print</span> <span class="var" data-line="29" data-column="11">banner</span>;
+    <span class="kw" data-line="30" data-column="5">if</span> (<span class="var" data-line="30" data-column="9">ready</span> <span class="op" data-line="30" data-column="15">&amp;&amp;</span> <span class="fn" data-line="30" data-column="18">sum</span>(<span class="var" data-line="30" data-column="22">numbers</span>, <span class="num" data-line="30" data-column="31">5</span>) <span class="op" data-line="30" data-column="34">&gt;</span> <span class="num" data-line="30" data-column="36">0</span>) {
+        <span class="kw" data-line="31" data-column="9">print</span> <span class="str" data-line="31" data-column="15">&quot;sum&quot;</span>, <span class="var" data-line="31" data-column="22">separator</span>, <span class="str" data-line="31" data-column="33">&quot; &quot;</span>, <span class="fn" data-line="31" data-column="38">sum</span>(<span class="var" data-line="31" data-column="42">numbers</span>, <span class="num" data-line="31" data-column="51">5</span>), <span class="str" data-line="31" data-column="55">&quot;\n&quot;</span>;
+    } <span class="kw" data-line="32" data-column="7">else</span> {
+        <span class="kw" data-line="33" data-column="9">print</span> <span class="str" data-line="33" data-column="15">&quot;No numbers\n&quot;</span>;
+    }
+    <span class="kw" data-line="35" data-column="5">print</span> <span class="str" data-line="35" data-column="11">&quot;factorial(5) = &quot;</span>, <span class="fn" data-line="35" data-column="30">factorial</span>(<span class="num" data-line="35" data-column="40">5</span>), <span class="str" data-line="35" data-column="44">&quot;, power = &quot;</span>, <span class="var" data-line="35" data-column="58">power</span>, <span class="str" data-line="35" data-column="65">&quot;\n&quot;</span>;
+    <span class="kw" data-line="36" data-column="5">return</span> <span class="num" data-line="36" data-column="12">0</span>;
+}
+
+</code></pre>
+<footer>Function declarations and direct call names are classified from the AST. Source spacing and comments are retained. Phase 1: lexing and parsing.</footer>
+</main></body></html>

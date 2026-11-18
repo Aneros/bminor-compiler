@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>B-Minor | examples/invalid/syntax_errors.bminor</title>
+<style>
+:root{color-scheme:dark;--bg:#10151f;--panel:#171e2b;--border:#303c50;--fg:#e6edf3;--muted:#9ba8bd}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:40px 24px}header{margin-bottom:24px}
+.eyebrow{color:#50d4cf;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+h1{font-size:clamp(22px,4vw,34px);margin:8px 0;overflow-wrap:anywhere;line-height:1.25}
+.summary{margin:10px 0 18px;color:var(--muted)}.status{display:inline-block;border:1px solid var(--border);border-radius:20px;padding:3px 12px;font-size:13px}
+.ok{color:#a8d8a0}.bad{color:#ff7b87}.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font:13px/1.7 ui-monospace,monospace}
+pre.code{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:24px;overflow:auto;margin:0;tab-size:4;direction:ltr;text-align:left;unicode-bidi:isolate}
+pre.code code{font:14px/1.8 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;white-space:pre}
+.kw{color:#7db5ff;font-weight:700}.ty{color:#50d4cf}.var{color:#e6edf3}.fn{color:#ffd166}
+.num{color:#ffab70}.str{color:#a8d8a0}.op{color:#b8c1cf}.comment{color:#9099a5;font-style:italic}
+.invalid,.error{color:#ff7b87;text-decoration:underline wavy #ff7b87;text-underline-offset:4px}
+.diagnostics{margin-top:24px;border:1px solid #6b3545;background:#281b25;border-radius:12px;padding:16px 24px}
+.diagnostics h2{font-size:18px;margin:0 0 10px}.diagnostics ol{margin:0;padding-left:24px}.diagnostics li{padding:4px;overflow-wrap:anywhere}
+.diagnostics code{color:#ffab9c}footer{color:var(--muted);font-size:12px;margin-top:18px}
+@media print{body{background:#fff;color:#111}pre.code{background:#fff;color:#111;border-color:#aaa}.var{color:#111}.comment{color:#555}}
+</style>
+</head>
+<body><main><header>
+<div class="eyebrow">B-Minor / Compiler front end</div>
+<h1>examples/invalid/syntax_errors.bminor</h1>
+<p class="summary"><span class="status bad">3 diagnostic(s)</span></p>
+<div class="legend" aria-label="Syntax color legend"><span class="kw">keyword</span><span class="ty">type</span><span class="var">variable</span><span class="fn">function</span><span class="num">number / boolean</span><span class="str">string / char</span><span class="comment">comment</span><span class="error">error</span></div>
+</header>
+<pre class="code" id="source" tabindex="0" aria-label="B-Minor source code"><code><span class="var" data-line="1" data-column="1">broken</span>: <span class="ty" data-line="1" data-column="9">integer</span> <span class="op" data-line="1" data-column="17">=</span> <span class="plain error" data-line="1" data-column="19">;</span>
+<span class="var" data-line="2" data-column="1">good_global</span>: <span class="ty" data-line="2" data-column="14">integer</span> <span class="op" data-line="2" data-column="22">=</span> <span class="num" data-line="2" data-column="24">7</span>;
+
+<span class="fn" data-line="4" data-column="1">main</span>: <span class="kw" data-line="4" data-column="7">function</span> <span class="ty" data-line="4" data-column="16">integer</span> () <span class="op" data-line="4" data-column="27">=</span> {
+    <span class="var" data-line="5" data-column="5">missing_semicolon</span>: <span class="ty" data-line="5" data-column="24">integer</span> <span class="op" data-line="5" data-column="32">=</span> <span class="num" data-line="5" data-column="34">1</span>
+    <span class="kw error" data-line="6" data-column="5">print</span> <span class="str" data-line="6" data-column="11">&quot;Parser recovers at this print keyword.\n&quot;</span>;
+    <span class="var" data-line="7" data-column="5">wrong_expression</span>: <span class="ty" data-line="7" data-column="23">integer</span> <span class="op" data-line="7" data-column="31">=</span> (<span class="num" data-line="7" data-column="34">2</span> <span class="op" data-line="7" data-column="36">+</span> <span class="plain error" data-line="7" data-column="38">)</span>;
+    <span class="kw" data-line="8" data-column="5">print</span> <span class="str" data-line="8" data-column="11">&quot;Parser also recovers after the bad expression.\n&quot;</span>;
+    <span class="kw" data-line="9" data-column="5">return</span> <span class="num" data-line="9" data-column="12">0</span>;
+}
+
+</code></pre>
+<section class="diagnostics" aria-label="Diagnostics"><h2>Diagnostics</h2><ol>
+<li><code>examples/invalid/syntax_errors.bminor:1:19 [P001]</code> expected an expression, found SEMICOLON</li>
+<li><code>examples/invalid/syntax_errors.bminor:6:5 [P001]</code> expected &#39;;&#39; after a declaration or prototype, found KW_PRINT</li>
+<li><code>examples/invalid/syntax_errors.bminor:7:38 [P001]</code> expected an expression, found RIGHT_PAREN</li>
+</ol></section>
+<footer>Function declarations and direct call names are classified from the AST. Source spacing and comments are retained. Phase 1: lexing and parsing.</footer>
+</main></body></html>
